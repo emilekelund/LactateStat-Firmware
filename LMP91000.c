@@ -2,7 +2,7 @@
  FILENAME: LMP91000.c
  AUTHOR: Emil Ekelund
  EMAIL: eekelund@kth.se
- VERSION: 0.2
+ VERSION: 0.3
 
  THIS FILE IS MOSTLY BASED ON THE SOURCE LISTED BELOW. IT HAS BEEN ADAPTED
  TO THE C PROGRAMMING LANGUAGE INSTEAD OF THE C++ LANGUAGE. IT HAS ALSO BEEN 
@@ -33,6 +33,10 @@
  *  Version 0.2
  *  2021-01-15
  *      Standard methods implemented
+ *
+ *  Version 0.3
+ *  2021-02-04
+        Function to determine the lmp91000 bias created
  
 
  * SOURCES
@@ -54,6 +58,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "LMP91000.h"
 #include "nrf_delay.h"
 #include "nrf_drv_twi.h"
@@ -64,6 +69,8 @@ static uint8_t lmp91000_r_load = 3;
 static uint8_t lmp91000_int_zero = 1;
 static uint8_t lmp91000_bias = 0;
 static uint8_t lmp91000_bias_sign = 0;
+const static int lmp91000_op_voltage = 3300; // The device is powered by 3300mV
+const static int NUM_TIA_BIAS = 14;
 
 const uint32_t TIA_GAIN[7] = {2750, 3500, 7000, 14000, 35000, 120000, 350000};
 const double TIA_BIAS[14] = {0, 0.01, 0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18, 0.2, 0.22, 0.24};
@@ -617,4 +624,58 @@ void lmp91000_set_mode(nrf_drv_twi_t const *const p_instance, uint8_t user_mode)
             lmp91000_sleep(p_instance);
             break;
     }
+}
+
+/*
+  @param voltage: The voltage that you want to
+         determine the bias for.
+  @return The bias closest to input value
+  @brief Function to determine the correct
+         bias value depending to the voltage
+         you input.
+*/
+signed char determine_lmp91000_bias(int16_t voltage) {
+  signed char polarity = 0;
+
+  if (voltage < 0) {
+    polarity = -1;
+  } else {
+    polarity = 0;
+  }
+
+  int16_t v1 = 0;
+  int16_t v2 = 0;
+
+  voltage = abs(voltage);
+
+  if (voltage == 0) {
+    return 0;
+  }
+
+  for (int i = 0; < NUM_TIA_BIAS-1; i++) {
+
+    v1 = lmp91000_op_voltage*TIA_BIAS[i];
+    v2 = lmp91000_op_voltage*TIA_BIAS[i+1];
+
+    if (voltage == v1) {
+
+      return polarity * i;
+
+    } else if (voltage > v1 && voltage < v2) {
+      
+        if (abs(voltage - v1) < abs(voltage - v2)) {
+
+          return polarity * i;
+
+        } else {
+
+          return polarity * (i+1);
+
+        }
+    }
+
+  }
+
+  return  0;
+
 }
