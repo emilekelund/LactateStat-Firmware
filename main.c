@@ -71,6 +71,7 @@
 #include "sensorsim.h"
 #include "nrf_drv_gpiote.h"
 #include "nrf_drv_saadc.h"
+#include "nrf_gpio.h"
 
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
@@ -110,6 +111,8 @@
 #define SAMPLES_IN_BUFFER 1
 #define ALPHA 1 // Alpha value (between 0-1) for the Exponential Weighted Moving Average (EWMA) filter, lower value = more smoothing. A value of 1 effectively disables the filter
 #define SAADC_CALIBRATION_INTERVAL 50 // Determines how often the SAADC should be calibrated relative to NRF_DRV_SAADC_EVT_DONE event. E.g. value 5 will make the SAADC calibrate every fifth time the NRF_DRV_SAADC_EVT_DONE is received.
+
+#define MENB_PIN 10
 
 /* TWI instance ID. */
 #define TWI_INSTANCE_ID 0
@@ -735,9 +738,9 @@ static void twi_init(void) {
   ret_code_t err_code;
 
   const nrf_drv_twi_config_t twi_LMP91000_config = {
-      .scl = 6,
-      .sda = 7,
-      .frequency = NRF_DRV_TWI_FREQ_100K,
+      .scl = 9,
+      .sda = 8,
+      .frequency = NRF_DRV_TWI_FREQ_400K,
       .interrupt_priority = APP_IRQ_PRIORITY_HIGH,
       .clear_bus_init = false};
 
@@ -765,10 +768,13 @@ int main(void) {
 
   conn_params_init();
   peer_manager_init();
+  nrf_gpio_cfg_output(MENB_PIN);
+  nrf_gpio_pin_clear(MENB_PIN);
 
   twi_init();
   saadc_init();
   init_lmp91000_settings();
+
 
   advertising_start(erase_bonds);
 

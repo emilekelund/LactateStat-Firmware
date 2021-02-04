@@ -101,6 +101,9 @@
       <file file_name="../../../our_service.c" />
       <file file_name="../../../LMP91000.c" />
       <file file_name="../../../LMP91000.h" />
+      <configuration
+        Name="Debug"
+        c_preprocessor_definitions="CONFIG_NFCT_PINS_AS_GPIOS" />
     </folder>
     <folder Name="nRF_Segger_RTT">
       <file file_name="../../../../../../external/segger_rtt/SEGGER_RTT.c" />
@@ -132,6 +135,9 @@
       <file file_name="../../../../../../components/softdevice/common/nrf_sdh_ble.c" />
       <file file_name="../../../../../../components/softdevice/common/nrf_sdh_soc.c" />
     </folder>
+    <configuration
+      Name="Debug"
+      c_preprocessor_definitions="CONFIG_NFCT_PINS_AS_GPIOS" />
   </project>
   <configuration
     Name="Release"

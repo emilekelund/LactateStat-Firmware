@@ -652,7 +652,7 @@ signed char determine_lmp91000_bias(int16_t voltage) {
     return 0;
   }
 
-  for (int i = 0; < NUM_TIA_BIAS-1; i++) {
+  for (int i = 0; i < NUM_TIA_BIAS-1; i++) {
 
     v1 = lmp91000_op_voltage*TIA_BIAS[i];
     v2 = lmp91000_op_voltage*TIA_BIAS[i+1];
