@@ -201,7 +201,6 @@ static void init_lmp91000_settings() {
  * @param[in] characteristic1_value     value that was received from the phone
  */
 // called from our_services.c from on_write();
-// Make a note of the arguments that are passed to this handler, we will use that later on
 static void characteristic1_value_write_handler(uint32_t characteristic1_value) {
   NRF_LOG_INFO("We have received the characteristic1 value into our App:  %d", characteristic1_value);
 }
@@ -683,7 +682,7 @@ static void log_init(void) {
 void saadc_init(void) {
 
   ret_code_t err_code;
-  nrf_saadc_channel_config_t channel_config = NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(NRF_SAADC_INPUT_AIN0);
+  nrf_saadc_channel_config_t channel_config = NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(NRF_SAADC_INPUT_AIN2);
 
   channel_config.burst = NRF_SAADC_BURST_ENABLED;
   channel_config.reference = NRF_SAADC_REFERENCE_INTERNAL;
