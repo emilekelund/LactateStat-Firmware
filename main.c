@@ -521,6 +521,7 @@ static void ble_evt_handler(ble_evt_t const *p_ble_evt, void *p_context) {
     // Stop timers on BLE disconnect
     app_timer_stop(m_our_char_timer_id);
     app_timer_stop(m_our_adc_sample_timer);
+    lmp91000_sleep(&m_twi); // Set lmp91000 to sleep when disconnected.
 
     break;
 
