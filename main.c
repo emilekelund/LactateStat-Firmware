@@ -109,8 +109,8 @@
 #define DEAD_BEEF 0xDEADBEEF /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
 #define SAMPLES_IN_BUFFER 1
-#define ALPHA 1 // Alpha value (between 0-1) for the Exponential Weighted Moving Average (EWMA) filter, lower value = more smoothing. A value of 1 effectively disables the filter
-#define SAADC_CALIBRATION_INTERVAL 50 // Determines how often the SAADC should be calibrated relative to NRF_DRV_SAADC_EVT_DONE event. E.g. value 5 will make the SAADC calibrate every fifth time the NRF_DRV_SAADC_EVT_DONE is received.
+#define ALPHA 0.5 // Alpha value (between 0-1) for the Exponential Weighted Moving Average (EWMA) filter, lower value = more smoothing. A value of 1 effectively disables the filter
+#define SAADC_CALIBRATION_INTERVAL 5000 // Determines how often the SAADC should be calibrated relative to NRF_DRV_SAADC_EVT_DONE event. E.g. value 5 will make the SAADC calibrate every fifth time the NRF_DRV_SAADC_EVT_DONE is received.
 
 #define MENB_PIN 10
 
@@ -184,13 +184,12 @@ static void init_lmp91000_settings() {
   nrf_delay_ms(0.5);
   lmp91000_sleep(&m_twi);
   nrf_delay_ms(0.5);
-  lmp91000_set_three_lead(&m_twi);
-  lmp91000_set_gain(&m_twi, 6);
+  lmp91000_set_gain(&m_twi, 7);
   lmp91000_set_r_load(&m_twi, 3);
   lmp91000_set_int_ref_source(&m_twi);
   lmp91000_set_int_z(&m_twi, 0);
   lmp91000_set_pos_bias(&m_twi);
-  lmp91000_set_bias(&m_twi, 6, 1);
+  lmp91000_set_bias(&m_twi, 6, 0);
   nrf_delay_ms(0.5);
   read_lmp91000_registers();
 }
@@ -202,7 +201,8 @@ static void init_lmp91000_settings() {
  */
 // called from our_services.c from on_write();
 static void characteristic1_value_write_handler(uint32_t characteristic1_value) {
-  NRF_LOG_INFO("We have received the characteristic1 value into our App:  %d", characteristic1_value);
+  NRF_LOG_INFO("We have received the bias setting:  %d", characteristic1_value);
+  lmp91000_set_bias(&m_twi, characteristic1_value, 1);
 }
 
 /**@brief Callback function for SAADC
@@ -533,6 +533,10 @@ static void ble_evt_handler(ble_evt_t const *p_ble_evt, void *p_context) {
     err_code = nrf_ble_qwr_conn_handle_assign(&m_qwr, m_conn_handle);
     APP_ERROR_CHECK(err_code);
 
+    lmp91000_set_three_lead(&m_twi); // Set the lmp91000 to amperometric mode when connected. Sleep when disconnected.
+
+    read_lmp91000_registers();
+
     // When connected; start our timer to start regular LMP91000 measurements
     app_timer_start(m_our_char_timer_id, OUR_CHAR_TIMER_INTERVAL, NULL);
     app_timer_start(m_our_adc_sample_timer, OUR_ADC_SAMPLE_TIMER_INTERVAL, NULL);
@@ -753,7 +757,7 @@ static void twi_init(void) {
 /**@brief Function for application main entry.
  */
 int main(void) {
-  bool erase_bonds = false;
+  bool erase_bonds = true;
 
   // Initialize.
   log_init();
