@@ -690,8 +690,8 @@ void saadc_init(void) {
   nrf_saadc_channel_config_t channel_config = NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(NRF_SAADC_INPUT_AIN2);
 
   channel_config.burst = NRF_SAADC_BURST_ENABLED;
-  channel_config.reference = NRF_SAADC_REFERENCE_INTERNAL;
-  channel_config.gain = NRF_SAADC_GAIN1_6;
+  channel_config.reference = NRF_SAADC_REFERENCE_VDD4;
+  channel_config.gain = NRF_SAADC_GAIN1_4;
 
   err_code = nrf_drv_saadc_init(NULL, saadc_callback);
   APP_ERROR_CHECK(err_code);
