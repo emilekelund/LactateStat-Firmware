@@ -187,7 +187,7 @@ static void init_lmp91000_settings() {
   lmp91000_set_gain(&m_twi, 7);
   lmp91000_set_r_load(&m_twi, 3);
   lmp91000_set_int_ref_source(&m_twi);
-  lmp91000_set_int_z(&m_twi, 1);
+  lmp91000_set_int_z(&m_twi, 0);
   lmp91000_set_neg_bias(&m_twi);
   lmp91000_set_bias(&m_twi, 2, 0);
   nrf_delay_ms(0.5);
