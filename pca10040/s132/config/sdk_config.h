@@ -3165,7 +3165,7 @@
 // <8=> 256x 
 
 #ifndef NRFX_SAADC_CONFIG_OVERSAMPLE
-#define NRFX_SAADC_CONFIG_OVERSAMPLE 5
+#define NRFX_SAADC_CONFIG_OVERSAMPLE 6
 #endif
 
 // <q> NRFX_SAADC_CONFIG_LP_MODE  - Enabling low power mode
@@ -5141,7 +5141,7 @@
 // <8=> 256x 
 
 #ifndef SAADC_CONFIG_OVERSAMPLE
-#define SAADC_CONFIG_OVERSAMPLE 5
+#define SAADC_CONFIG_OVERSAMPLE 6
 #endif
 
 // <q> SAADC_CONFIG_LP_MODE  - Enabling low power mode

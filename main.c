@@ -109,7 +109,7 @@
 #define DEAD_BEEF 0xDEADBEEF /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
 #define SAMPLES_IN_BUFFER 1
-#define ALPHA 0.5 // Alpha value (between 0-1) for the Exponential Weighted Moving Average (EWMA) filter, lower value = more smoothing. A value of 1 effectively disables the filter
+#define ALPHA 0.1 // Alpha value (between 0-1) for the Exponential Weighted Moving Average (EWMA) filter, lower value = more smoothing. A value of 1 effectively disables the filter
 #define SAADC_CALIBRATION_INTERVAL 5000 // Determines how often the SAADC should be calibrated relative to NRF_DRV_SAADC_EVT_DONE event. E.g. value 5 will make the SAADC calibrate every fifth time the NRF_DRV_SAADC_EVT_DONE is received.
 
 #define MENB_PIN 10
@@ -144,7 +144,7 @@ ble_os_t m_our_service;
 APP_TIMER_DEF(m_our_char_timer_id);
 #define OUR_CHAR_TIMER_INTERVAL APP_TIMER_TICKS(1000) //Send data to BLE device every 1s
 APP_TIMER_DEF(m_our_adc_sample_timer);
-#define OUR_ADC_SAMPLE_TIMER_INTERVAL APP_TIMER_TICKS(100) // Sample every 100ms
+#define OUR_ADC_SAMPLE_TIMER_INTERVAL APP_TIMER_TICKS(50) // Sample every 50ms
 APP_TIMER_DEF(m_our_lmp91000_settings_timer_id);
 #define OUR_LMP91000_SETTINGS_TIMER_INTERVAL APP_TIMER_TICKS(500) // Send the lmp91000 register settings 0.5s after ble connection initiated
 
@@ -189,7 +189,7 @@ static void init_lmp91000_settings() {
   lmp91000_set_int_ref_source(&m_twi);
   lmp91000_set_int_z(&m_twi, 0);
   lmp91000_set_neg_bias(&m_twi);
-  lmp91000_set_bias(&m_twi, 2, 0);
+  lmp91000_set_bias(&m_twi, 0, 0);
   nrf_delay_ms(0.5);
   read_lmp91000_registers();
 }
@@ -201,8 +201,16 @@ static void init_lmp91000_settings() {
  */
 // called from our_services.c from on_write();
 static void characteristic1_value_write_handler(uint32_t characteristic1_value) {
-  NRF_LOG_INFO("We have received the bias setting:  %d", characteristic1_value);
-  lmp91000_set_bias(&m_twi, characteristic1_value, 1);
+  NRF_LOG_INFO("We have received the value:  %d", characteristic1_value);
+  uint8_t registerData[2] =
+    {
+      ((uint16_t) characteristic1_value >> 8) & 0xFF,
+      ((uint16_t) characteristic1_value >> 0) & 0xFF,
+    };
+    NRF_LOG_INFO("TIACN REG: %d", registerData[0]);
+    NRF_LOG_INFO("REFCN REG: %d", registerData[1]);
+    lmp91000_write_register(&m_twi, LMP91000_TIACN_REG, registerData[0], false);
+    lmp91000_write_register(&m_twi, LMP91000_REFCN_REG, registerData[1], false);
 }
 
 /**@brief Callback function for SAADC
@@ -245,7 +253,7 @@ static void lmp91000_settings_broadcast_handler(void *p_context) {
 
 // Timer event handler
 static void ble_timer_timeout_handler(void *p_context) {
-  voltage = adc_val / 1137.77777778f;
+  voltage = adc_val / 1241.2121212121f;
   NRF_LOG_INFO("Adc value: %d\r\n", adc_val);
   NRF_LOG_INFO("Voltage: " NRF_LOG_FLOAT_MARKER "V\r\n", NRF_LOG_FLOAT(voltage));
   our_potentiostat_characteristic_update(&m_our_service, &adc_val); // Broadcast the raw ADC value over BLE
