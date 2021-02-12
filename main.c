@@ -144,7 +144,7 @@ ble_os_t m_our_service;
 APP_TIMER_DEF(m_our_char_timer_id);
 #define OUR_CHAR_TIMER_INTERVAL APP_TIMER_TICKS(1000) //Send data to BLE device every 1s
 APP_TIMER_DEF(m_our_adc_sample_timer);
-#define OUR_ADC_SAMPLE_TIMER_INTERVAL APP_TIMER_TICKS(50) // Sample every 50ms
+#define OUR_ADC_SAMPLE_TIMER_INTERVAL APP_TIMER_TICKS(10) // Sample every 10ms
 APP_TIMER_DEF(m_our_lmp91000_settings_timer_id);
 #define OUR_LMP91000_SETTINGS_TIMER_INTERVAL APP_TIMER_TICKS(500) // Send the lmp91000 register settings 0.5s after ble connection initiated
 
