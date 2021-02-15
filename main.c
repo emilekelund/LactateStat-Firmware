@@ -109,7 +109,7 @@
 #define DEAD_BEEF 0xDEADBEEF /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
 #define SAMPLES_IN_BUFFER 1
-#define ALPHA 0.1 // Alpha value (between 0-1) for the Exponential Weighted Moving Average (EWMA) filter, lower value = more smoothing. A value of 1 effectively disables the filter
+#define ALPHA 0.7 // Alpha value (between 0-1) for the Exponential Weighted Moving Average (EWMA) filter, lower value = more smoothing. A value of 1 effectively disables the filter
 #define SAADC_CALIBRATION_INTERVAL 50000 // Determines how often the SAADC should be calibrated relative to NRF_DRV_SAADC_EVT_DONE event. E.g. value 5 will make the SAADC calibrate every fifth time the NRF_DRV_SAADC_EVT_DONE is received.
 
 #define MENB_PIN 10
