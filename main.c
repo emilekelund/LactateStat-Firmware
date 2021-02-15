@@ -110,7 +110,7 @@
 
 #define SAMPLES_IN_BUFFER 1
 #define ALPHA 0.1 // Alpha value (between 0-1) for the Exponential Weighted Moving Average (EWMA) filter, lower value = more smoothing. A value of 1 effectively disables the filter
-#define SAADC_CALIBRATION_INTERVAL 5000 // Determines how often the SAADC should be calibrated relative to NRF_DRV_SAADC_EVT_DONE event. E.g. value 5 will make the SAADC calibrate every fifth time the NRF_DRV_SAADC_EVT_DONE is received.
+#define SAADC_CALIBRATION_INTERVAL 50000 // Determines how often the SAADC should be calibrated relative to NRF_DRV_SAADC_EVT_DONE event. E.g. value 5 will make the SAADC calibrate every fifth time the NRF_DRV_SAADC_EVT_DONE is received.
 
 #define MENB_PIN 10
 
@@ -127,6 +127,7 @@ static int32_t adc_val_old = 0;
 static float voltage = 0;
 static uint32_t m_adc_evt_counter = 0;
 static bool m_saadc_calibrate = false;
+static bool m_saadc_first_start_calibrate = true;
 static uint8_t TIACN_reg = 0;
 static uint8_t REFCN_reg = 0;
 static uint8_t MODECN_reg = 0;
@@ -219,9 +220,10 @@ void saadc_callback(nrf_drv_saadc_evt_t const *p_event) {
   ret_code_t err_code;
   if (p_event->type == NRF_DRV_SAADC_EVT_DONE) {
 
-    if ((m_adc_evt_counter % SAADC_CALIBRATION_INTERVAL) == 0) //Evaluate if offset calibration should be performed. Configure the SAADC_CALIBRATION_INTERVAL constant to change the calibration frequency
+    if ((m_adc_evt_counter % SAADC_CALIBRATION_INTERVAL) == 0 || m_saadc_first_start_calibrate == true) //Evaluate if offset calibration should be performed. Configure the SAADC_CALIBRATION_INTERVAL constant to change the calibration frequency
     {
       nrf_drv_saadc_abort();    // Abort all ongoing conversions. Calibration cannot be run if SAADC is busy
+      m_saadc_first_start_calibrate = false; // Set to false so that we only calibrate on start
       m_saadc_calibrate = true; // Set flag to trigger calibration in main context when SAADC is stopped
     }
 
