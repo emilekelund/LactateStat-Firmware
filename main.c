@@ -110,7 +110,7 @@
 
 #define SAMPLES_IN_BUFFER 1
 #define ALPHA 0.7 // Alpha value (between 0-1) for the Exponential Weighted Moving Average (EWMA) filter, lower value = more smoothing. A value of 1 effectively disables the filter
-#define SAADC_CALIBRATION_INTERVAL 50000 // Determines how often the SAADC should be calibrated relative to NRF_DRV_SAADC_EVT_DONE event. E.g. value 5 will make the SAADC calibrate every fifth time the NRF_DRV_SAADC_EVT_DONE is received.
+#define SAADC_CALIBRATION_INTERVAL 5000000 // Determines how often the SAADC should be calibrated relative to NRF_DRV_SAADC_EVT_DONE event. E.g. value 5 will make the SAADC calibrate every fifth time the NRF_DRV_SAADC_EVT_DONE is received.
 
 #define MENB_PIN 10
 
@@ -697,7 +697,7 @@ static void log_init(void) {
 void saadc_init(void) {
 
   ret_code_t err_code;
-  nrf_saadc_channel_config_t channel_config = NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(NRF_SAADC_INPUT_AIN2);
+  nrf_saadc_channel_config_t channel_config = NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(NRF_SAADC_INPUT_AIN3);
 
   channel_config.burst = NRF_SAADC_BURST_ENABLED;
   channel_config.reference = NRF_SAADC_REFERENCE_VDD4;
