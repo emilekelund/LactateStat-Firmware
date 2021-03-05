@@ -171,7 +171,7 @@ void assert_nrf_callback(uint16_t line_num, const uint8_t *p_file_name) {
   app_error_handler(DEAD_BEEF, line_num, p_file_name);
 }
 
-static void read_lmp91000_registers() {
+static void read_lmp91000_registers(void) {
   TIACN_reg = lmp91000_read_register(&m_twi, LMP91000_TIACN_REG);
   REFCN_reg = lmp91000_read_register(&m_twi, LMP91000_REFCN_REG);
   MODECN_reg = lmp91000_read_register(&m_twi, LMP91000_MODECN_REG);
@@ -181,7 +181,7 @@ static void read_lmp91000_registers() {
 }
 
 // Applies suitable start settings, can be changed by the user via software
-static void init_lmp91000_settings() {
+static void init_lmp91000_settings(void) {
   nrf_delay_ms(0.5);
   lmp91000_sleep(&m_twi);
   nrf_delay_ms(0.5);

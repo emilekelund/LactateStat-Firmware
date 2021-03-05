@@ -26,7 +26,7 @@ void on_write(ble_os_t * p_our_service, ble_evt_t const * p_ble_evt)
         NRF_LOG_INFO("characteristic1_value: Write Happened!");
         
        
-        // Make sure that the data is 4 bytes (or whatever the size of your characteristic)
+        // Make sure that the data is 4 bytes
         // It has to match the exact byte size of the characteristic to avoid problems
         int8_t len = p_evt_write->len;
         if (len != 4)

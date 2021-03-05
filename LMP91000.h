@@ -105,11 +105,11 @@ void lmp91000_unlock(nrf_drv_twi_t const *const p_instance);
 
 void lmp91000_set_gain(nrf_drv_twi_t const *const p_instance, uint8_t user_gain);
 
-uint32_t lmp91000_get_gain();
+uint32_t lmp91000_get_gain(void);
 
 void lmp91000_set_r_load(nrf_drv_twi_t const *const p_instance, uint8_t user_load);
 
-uint8_t lmp91000_get_r_load();
+uint8_t lmp91000_get_r_load(void);
 
 void lmp91000_set_int_ref_source(nrf_drv_twi_t const *const p_instance);
 
@@ -119,7 +119,7 @@ void lmp91000_set_ref_source(nrf_drv_twi_t const *const p_instance, uint8_t sour
 
 void lmp91000_set_int_z(nrf_drv_twi_t const *const p_instance, uint8_t user_int_z);
 
-double lmp91000_get_int_z();
+double lmp91000_get_int_z(void);
 
 void lmp91000_set_pos_bias(nrf_drv_twi_t const *const p_instance);
 
@@ -129,9 +129,9 @@ void lmp91000_set_bias_sign(nrf_drv_twi_t const *const p_instance, uint8_t user_
 
 void lmp91000_set_bias(nrf_drv_twi_t const *const p_instance, uint8_t user_bias, uint8_t user_sign);
 
-double lmp91000_get_bias();
+double lmp91000_get_bias(void);
 
-uint8_t lmp91000_get_bias_sign();
+uint8_t lmp91000_get_bias_sign(void);
 
 void lmp91000_enable_fet(nrf_drv_twi_t const *const p_instance);
 

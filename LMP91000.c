@@ -70,12 +70,12 @@ static uint8_t lmp91000_int_zero = 1;
 static uint8_t lmp91000_bias = 0;
 static uint8_t lmp91000_bias_sign = 0;
 const static int lmp91000_op_voltage = 3300; // The device is powered by 3300mV
-const static int NUM_TIA_BIAS = 14;
+const static uint8_t NUM_TIA_BIAS = 14;
 
-const uint32_t TIA_GAIN[7] = {2750, 3500, 7000, 14000, 35000, 120000, 350000};
-const double TIA_BIAS[14] = {0, 0.01, 0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18, 0.2, 0.22, 0.24};
-const double INT_ZERO[3] = {0.2, 0.5, 0.67};
-const uint8_t R_LOAD[4] = {10, 33, 50, 100};
+const uint32_t TIA_GAIN[] = {2750, 3500, 7000, 14000, 35000, 120000, 350000};
+const double TIA_BIAS[] = {0, 0.01, 0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18, 0.2, 0.22, 0.24};
+const double INT_ZERO[] = {0.2, 0.5, 0.67};
+const uint8_t R_LOAD[] = {10, 33, 50, 100};
 
 /*
  @param p_instance: The TWI instance you are using
@@ -195,7 +195,7 @@ void lmp91000_set_gain(nrf_drv_twi_t const *const p_instance, uint8_t user_gain)
  @brief Simple getter function to retrieve the 
         current gain.
 */
-uint32_t lmp91000_get_gain() {
+uint32_t lmp91000_get_gain(void) {
     if (lmp91000_gain == 0) { // Default value
         return lmp91000_gain;
     } else {
@@ -232,7 +232,7 @@ void lmp91000_set_r_load(nrf_drv_twi_t const *const p_instance, uint8_t user_loa
  @brief Simple getter function to retrieve the
         current internal load resistor value.
 */
-uint8_t lmp91000_get_r_load() {
+uint8_t lmp91000_get_r_load(void) {
     return R_LOAD[lmp91000_r_load];
 }
 
@@ -314,7 +314,7 @@ void lmp91000_set_int_z(nrf_drv_twi_t const *const p_instance, uint8_t user_int_
  @brief Simple getter function to retreive the
         Internal zero of the lmp91000.
 */
-double lmp91000_get_int_z() {
+double lmp91000_get_int_z(void) {
     return INT_ZERO[lmp91000_int_zero];
 }
 
@@ -422,7 +422,7 @@ void lmp91000_set_bias(nrf_drv_twi_t const *const p_instance, uint8_t user_bias,
  @brief Simple getter function to get the current bias value
  @return The currently used bias percentage value
 */
-double lmp91000_get_bias() {
+double lmp91000_get_bias(void) {
     return TIA_BIAS[lmp91000_bias];
 }
 
@@ -430,7 +430,7 @@ double lmp91000_get_bias() {
  @brief Simple getter function to get the bias sign
  @return 0 = negative bias, 1 = positive bias
 */
-uint8_t lmp91000_get_bias_sign() {
+uint8_t lmp91000_get_bias_sign(void) {
     return lmp91000_bias_sign;
 }
 

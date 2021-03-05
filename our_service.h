@@ -25,7 +25,7 @@ typedef void (*ble_os_characteristic1_value_write_handler_t) (uint32_t register_
 // Add other handlers here...
 typedef struct
 {
-	/**< Event handler to be called when the Characteristic1 is written */
+    /**< Event handler to be called when the Characteristic1 is written */
     ble_os_characteristic1_value_write_handler_t characteristic1_value_write_handler; 
     // Add other handlers here...
 
