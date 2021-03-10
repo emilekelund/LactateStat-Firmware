@@ -2,12 +2,6 @@
  FILENAME: LMP91000.c
  AUTHOR: Emil Ekelund
  EMAIL: eekelund@kth.se
- VERSION: 0.3
-
- THIS FILE IS MOSTLY BASED ON THE SOURCE LISTED BELOW. IT HAS BEEN ADAPTED
- TO THE C PROGRAMMING LANGUAGE INSTEAD OF THE C++ LANGUAGE. IT HAS ALSO BEEN 
- MODIFIED TO WORK WITH THE NORDIC SEMICONDUCTOR DEVICE nRF52832 INSTEAD OF 
- AN ARDUINO BASED SYSTEM.
 
  A FEW INSTRUCTIONS
  * All methods are defined and coded according to the instructions given in the
@@ -24,36 +18,6 @@
  * TIA - Transimpedance Amplifier
  * TIACN - Transimpedance Amplifier Control Register (0x10)
  * REFCN - Reference Control Register (0x11) 
- 
- * UPDATES
- *  VERSION 0.1
- *  2021-01-13
- *      Start of development
- * 
- *  Version 0.2
- *  2021-01-15
- *      Standard methods implemented
- *
- *  Version 0.3
- *  2021-02-04
-        Function to determine the lmp91000 bias created
- 
-
- * SOURCES
- * hoilett. "KickStat-Paper-Firmware" Authored: June 28, 2020.
- *      Accessed: January 13, 2021. GitHub. <https://github.com/LinnesLab/KickStat-Paper-Firmware>
- *      
- *      Reference Paper: KickStat: A Coin-Sized Potentiostat for High-Resolution Electrochemical Analysis
- *      Authors: Orlando S. Hoilett, Jenna F. Walker, Bethany M. Balash, Nicholas J. Jaras, Sriram Boppana and Jacqueline C. Linnes
- *      <https://www.mdpi.com/1424-8220/20/8/2407>
-
-
- * A couple of other useful links from TI's forum
- * https://e2e.ti.com/support/interface/etc_interface/f/146/t/258263
- * https://e2e.ti.com/support/amplifiers/precision_amplifiers/f/14/t/189399
- * https://e2e.ti.com/support/interface/etc_interface/f/146/t/195448
- * https://e2e.ti.com/support/amplifiers/precision_amplifiers/f/14/t/317192
-
 */
 
 #include <stdint.h>

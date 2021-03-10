@@ -3,7 +3,7 @@
  AUTHOR: Emil Ekelund
  EMAIL: eekelund@kth.se
 
-Please refer to the .c source file for an extended description, instructions and version updates.
+Please refer to the .c source file for an extended description.
 
 */
 
