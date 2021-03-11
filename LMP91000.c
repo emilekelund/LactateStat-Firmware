@@ -43,7 +43,6 @@ const uint8_t R_LOAD[] = {10, 33, 50, 100};
 
 /*
  @param p_instance: The TWI instance you are using
- @param i2c_address: i2c slave address to write to
  @param reg: The register you want to write
  @param data: The data to be written
  @param no_stop: Decides wheter a stop condition should be sent after the write.
@@ -63,7 +62,6 @@ void lmp91000_write_register(nrf_drv_twi_t const *const p_instance, uint8_t reg,
 
 /*
  @param p_instance: The TWI instance you are using
- @param i2c_address: i2c slave address you want to read from
  @param reg: The register you want to read from
  @return The wanted register value
  @brief i2c read function to read a register value from the LMP91000
