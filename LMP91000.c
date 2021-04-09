@@ -33,7 +33,6 @@ static uint8_t lmp91000_r_load = 3;
 static uint8_t lmp91000_int_zero = 1;
 static uint8_t lmp91000_bias = 0;
 static uint8_t lmp91000_bias_sign = 0;
-const static int lmp91000_op_voltage = 3300; // The device is powered by 3300mV
 const static uint8_t NUM_TIA_BIAS = 14;
 
 const uint32_t TIA_GAIN[] = {2750, 3500, 7000, 14000, 35000, 120000, 350000};
