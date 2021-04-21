@@ -2,7 +2,7 @@
 
 This is the Firmware used in my master thesis: LactateStat: Wearable Electronics and User-Friendly Software for Real-Time Sweat Monitoring
 
-The firmware was written in Segger Embedded Studio for the Arm Cortex-M4 based nRF52832 from Nordic Semiconductor. A library for the LMP91000 was implemented. BLE functionalities were also implemented. SDK version 15 was used for the development.
+The firmware was written in Segger Embedded Studio for the Arm Cortex-M4 based nRF52832 from Nordic Semiconductor. A library for the LMP91000 was implemented. BLE functionalities were also implemented. SDK version 15 was used for the development. Related repositories are found on my profile.
 
 ## Copyright disclamer
 
