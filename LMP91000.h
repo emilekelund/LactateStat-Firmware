@@ -3,7 +3,9 @@
  AUTHOR: Emil Ekelund
  EMAIL: eekelund@kth.se
 
-Please refer to the .c source file for an extended description.
+  Please refer to the .c source file for an extended description.
+
+  Copyright (c) 2021 Emil Ekelund
 
 */
 
