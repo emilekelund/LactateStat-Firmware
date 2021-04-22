@@ -112,8 +112,6 @@
 #define ALPHA 1 // Alpha value (between 0-1) for the Exponential Weighted Moving Average (EWMA) filter, lower value = more smoothing. A value of 1 effectively disables the filter
 #define SAADC_CALIBRATION_INTERVAL 5000000 // Determines how often the SAADC should be calibrated relative to NRF_DRV_SAADC_EVT_DONE event. E.g. value 5 will make the SAADC calibrate every fifth time the NRF_DRV_SAADC_EVT_DONE is received.
 
-#define MENB_PIN 10
-
 /* TWI instance ID. */
 #define TWI_INSTANCE_ID 0
 
@@ -146,8 +144,6 @@ APP_TIMER_DEF(m_our_char_timer_id);
 #define OUR_CHAR_TIMER_INTERVAL APP_TIMER_TICKS(1000) //Send data to BLE device every 1s
 APP_TIMER_DEF(m_our_adc_sample_timer);
 #define OUR_ADC_SAMPLE_TIMER_INTERVAL APP_TIMER_TICKS(10) // Sample every 10ms
-APP_TIMER_DEF(m_our_lmp91000_settings_timer_id);
-#define OUR_LMP91000_SETTINGS_TIMER_INTERVAL APP_TIMER_TICKS(500) // Send the lmp91000 register settings 0.5s after ble connection initiated
 
 // Use UUIDs for service(s) used in your application.
 static ble_uuid_t m_adv_uuids[] = /**< Universally unique service identifiers. */
@@ -175,9 +171,9 @@ static void read_lmp91000_registers(void) {
   TIACN_reg = lmp91000_read_register(&m_twi, LMP91000_TIACN_REG);
   REFCN_reg = lmp91000_read_register(&m_twi, LMP91000_REFCN_REG);
   MODECN_reg = lmp91000_read_register(&m_twi, LMP91000_MODECN_REG);
-  NRF_LOG_INFO("TIACN: %d", TIACN_reg);
-  NRF_LOG_INFO("REFCN: %d", REFCN_reg);
-  NRF_LOG_INFO("MODECN: %d", MODECN_reg);
+  // NRF_LOG_INFO("TIACN: %d", TIACN_reg);
+  // NRF_LOG_INFO("REFCN: %d", REFCN_reg);
+  // NRF_LOG_INFO("MODECN: %d", MODECN_reg);
 }
 
 // Applies suitable start settings, can be changed by the user via software
@@ -202,14 +198,14 @@ static void init_lmp91000_settings(void) {
  */
 // called from our_services.c from on_write();
 static void characteristic1_value_write_handler(uint32_t characteristic1_value) {
-  NRF_LOG_INFO("We have received the value:  %d", characteristic1_value);
+  // NRF_LOG_INFO("We have received the value:  %d", characteristic1_value);
   uint8_t registerData[2] =
     {
       ((uint16_t) characteristic1_value >> 8) & 0xFF,
       ((uint16_t) characteristic1_value >> 0) & 0xFF,
     };
-    NRF_LOG_INFO("TIACN REG: %d", registerData[0]);
-    NRF_LOG_INFO("REFCN REG: %d", registerData[1]);
+    // NRF_LOG_INFO("TIACN REG: %d", registerData[0]);
+    // NRF_LOG_INFO("REFCN REG: %d", registerData[1]);
     lmp91000_write_register(&m_twi, LMP91000_TIACN_REG, registerData[0], false);
     lmp91000_write_register(&m_twi, LMP91000_REFCN_REG, registerData[1], false);
 }
@@ -255,9 +251,9 @@ static void lmp91000_settings_broadcast_handler(void *p_context) {
 
 // Timer event handler
 static void ble_timer_timeout_handler(void *p_context) {
-  voltage = adc_val / 1241.2121212121f;
-  NRF_LOG_INFO("Adc value: %d\r\n", adc_val);
-  NRF_LOG_INFO("Voltage: " NRF_LOG_FLOAT_MARKER "V\r\n", NRF_LOG_FLOAT(voltage));
+  // voltage = adc_val / 1241.2121212121f;
+  // NRF_LOG_INFO("Adc value: %d\r\n", adc_val);
+  // NRF_LOG_INFO("Voltage: " NRF_LOG_FLOAT_MARKER "V\r\n", NRF_LOG_FLOAT(voltage));
   our_potentiostat_characteristic_update(&m_our_service, &adc_val); // Broadcast the raw ADC value over BLE
 }
 
@@ -354,7 +350,6 @@ static void timers_init(void) {
   // Initiate our timers
   app_timer_create(&m_our_char_timer_id, APP_TIMER_MODE_REPEATED, ble_timer_timeout_handler);
   app_timer_create(&m_our_adc_sample_timer, APP_TIMER_MODE_REPEATED, adc_timer_timeout_handler);
-  app_timer_create(&m_our_lmp91000_settings_timer_id, APP_TIMER_MODE_SINGLE_SHOT, lmp91000_settings_broadcast_handler);
 }
 
 /**@brief Function for the GAP initialization.
@@ -479,12 +474,12 @@ static void conn_params_init(void) {
 static void sleep_mode_enter(void) {
   ret_code_t err_code;
 
-  err_code = bsp_indication_set(BSP_INDICATE_IDLE);
-  APP_ERROR_CHECK(err_code);
+  //err_code = bsp_indication_set(BSP_INDICATE_IDLE);
+  //APP_ERROR_CHECK(err_code);
 
   // Prepare wakeup buttons.
-  err_code = bsp_btn_ble_sleep_mode_prepare();
-  APP_ERROR_CHECK(err_code);
+  //err_code = bsp_btn_ble_sleep_mode_prepare();
+  //APP_ERROR_CHECK(err_code);
 
   // Go to system-off mode (this function will not return; wakeup will cause a reset).
   err_code = sd_power_system_off();
@@ -503,8 +498,8 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt) {
   switch (ble_adv_evt) {
   case BLE_ADV_EVT_FAST:
     NRF_LOG_INFO("Fast advertising.");
-    err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING);
-    APP_ERROR_CHECK(err_code);
+    //err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING);
+    //APP_ERROR_CHECK(err_code);
     break;
 
   case BLE_ADV_EVT_IDLE:
@@ -537,8 +532,8 @@ static void ble_evt_handler(ble_evt_t const *p_ble_evt, void *p_context) {
 
   case BLE_GAP_EVT_CONNECTED:
     NRF_LOG_INFO("Connected.");
-    err_code = bsp_indication_set(BSP_INDICATE_CONNECTED);
-    APP_ERROR_CHECK(err_code);
+    //err_code = bsp_indication_set(BSP_INDICATE_CONNECTED);
+    //APP_ERROR_CHECK(err_code);
     m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
     err_code = nrf_ble_qwr_conn_handle_assign(&m_qwr, m_conn_handle);
     APP_ERROR_CHECK(err_code);
@@ -550,7 +545,6 @@ static void ble_evt_handler(ble_evt_t const *p_ble_evt, void *p_context) {
     // When connected; start our timer to start regular LMP91000 measurements
     app_timer_start(m_our_char_timer_id, OUR_CHAR_TIMER_INTERVAL, NULL);
     app_timer_start(m_our_adc_sample_timer, OUR_ADC_SAMPLE_TIMER_INTERVAL, NULL);
-    app_timer_start(m_our_lmp91000_settings_timer_id, OUR_LMP91000_SETTINGS_TIMER_INTERVAL, NULL);
     break;
 
   case BLE_GAP_EVT_PHY_UPDATE_REQUEST: {
@@ -752,9 +746,9 @@ static void twi_init(void) {
   ret_code_t err_code;
 
   const nrf_drv_twi_config_t twi_LMP91000_config = {
-      .scl = 9,
-      .sda = 8,
-      .frequency = NRF_DRV_TWI_FREQ_400K,
+      .scl = 10,
+      .sda = 9,
+      .frequency = NRF_DRV_TWI_FREQ_100K,
       .interrupt_priority = APP_IRQ_PRIORITY_HIGH,
       .clear_bus_init = false};
 
@@ -782,8 +776,6 @@ int main(void) {
 
   conn_params_init();
   peer_manager_init();
-  nrf_gpio_cfg_output(MENB_PIN);
-  nrf_gpio_pin_clear(MENB_PIN);
 
   twi_init();
   saadc_init();
@@ -794,6 +786,7 @@ int main(void) {
 
   // Enter main loop.
   for (;;) {
+
       if (m_saadc_calibrate == true) {
         while (nrf_drv_saadc_calibrate_offset() != NRF_SUCCESS)
         ; //Trigger calibration task
