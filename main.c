@@ -242,13 +242,6 @@ static void adc_timer_timeout_handler(void *p_context) {
   nrf_drv_saadc_sample();
 }
 
-// Potentiostat settings broadcast timer 
-// Send the current settings 0.5s after connecting to the smartphone
-// This is a single shot timer
-static void lmp91000_settings_broadcast_handler(void *p_context) {
-  our_potentiostat_settings_characteristic_update(&m_our_service, &TIACN_reg);
-}
-
 // Timer event handler
 static void ble_timer_timeout_handler(void *p_context) {
   // voltage = adc_val / 1241.2121212121f;
